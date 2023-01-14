@@ -30,6 +30,23 @@ const updateTicket = async(ticketId, data) => {
     }
 }
 
+const subscribeEvents = async(payload) => {
+
+    let service = payload.service;
+    switch(service){
+        case "CREATE_TICKET":
+            await createNotification(payload.data);
+            break;
+        case "SEND_BASIC_EMAIL":
+            await sendBasicEmail(payload.data);
+            break;
+        default:
+            console.log("No valid event received");
+            break;
+    }
+};
+
+
 const createNotification = async(data) => {
     try {
         const response = await repo.create(data);
@@ -43,5 +60,6 @@ module.exports = {
     sendBasicEmail,
     fetchPendingEmails,
     createNotification,
-    updateTicket
+    updateTicket,
+    subscribeEvents
 }
